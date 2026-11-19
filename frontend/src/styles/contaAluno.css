@@ -1,0 +1,893 @@
+
+/* ========================================
+   PÁGINA DE DETALHAMENTO DA CONTA
+======================================== */
+
+.conta-aluno-page {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding-bottom: 35px;
+  color: #30263a;
+}
+
+/* CAMINHO DE NAVEGAÇÃO */
+
+.conta-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 24px;
+  color: #928899;
+  font-size: 12px;
+}
+
+.conta-breadcrumb button {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: #57218a;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.conta-breadcrumb button:hover {
+  color: #32104f;
+}
+
+.conta-breadcrumb-separador {
+  color: #c8bfce;
+}
+
+/* CABEÇALHO */
+
+.conta-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 25px;
+  padding: 23px 25px;
+  border: 1px solid #ebe5f0;
+  border-radius: 13px;
+  background: #ffffff;
+  box-shadow: 0 3px 12px rgba(49, 16, 79, 0.035);
+}
+
+.conta-identificacao {
+  display: flex;
+  align-items: center;
+  gap: 17px;
+  min-width: 0;
+}
+
+.conta-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 62px;
+  height: 62px;
+  border-radius: 13px;
+  background: #efe6f7;
+  color: #57218a;
+  font-size: 21px;
+  font-weight: 700;
+}
+
+.conta-header-info {
+  min-width: 0;
+}
+
+.conta-subtitulo {
+  display: block;
+  margin-bottom: 5px;
+  color: #8c7b9b;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.conta-header h1 {
+  margin: 0 0 7px;
+  color: #30203d;
+  font-size: 23px;
+  font-weight: 700;
+}
+
+.conta-dados-aluno {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 9px;
+  color: #82788c;
+  font-size: 12px;
+}
+
+.conta-dados-aluno strong {
+  color: #5c5067;
+  font-weight: 600;
+}
+
+.conta-dado-separador {
+  color: #c7bdcf;
+}
+
+/* STATUS */
+
+.conta-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  flex-shrink: 0;
+  padding: 8px 13px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.conta-status-ponto {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.conta-status-ativo,
+.conta-status-em-dia,
+.conta-status-quitada {
+  background: #e4f6ee;
+  color: #16845e;
+}
+
+.conta-status-atencao,
+.conta-status-no-limite {
+  background: #fff4d9;
+  color: #a87516;
+}
+
+.conta-status-bloqueado,
+.conta-status-em-atraso {
+  background: #fdebed;
+  color: #c33f4b;
+}
+
+/* RESUMO FINANCEIRO */
+
+.conta-resumo {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 15px;
+  margin-bottom: 22px;
+}
+
+.conta-card {
+  min-width: 0;
+  padding: 19px;
+  border: 1px solid #ebe5f0;
+  border-radius: 11px;
+  background: #ffffff;
+  box-shadow: 0 3px 12px rgba(49, 16, 79, 0.035);
+}
+
+.conta-card-saldo {
+  border-top: 3px solid #e35d68;
+}
+
+.conta-card-disponivel {
+  border-top: 3px solid #20a779;
+}
+
+.conta-card-credito {
+  border-top: 3px solid #57218a;
+}
+
+.conta-card-topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 17px;
+  color: #82788c;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.conta-card-icone {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 29px;
+  height: 29px;
+  border-radius: 8px;
+  background: #f2edf6;
+  color: #57218a;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.conta-card-saldo .conta-card-icone {
+  background: #fdebed;
+  color: #d34c59;
+}
+
+.conta-card-disponivel .conta-card-icone {
+  background: #e4f6ee;
+  color: #16845e;
+}
+
+.conta-card-credito .conta-card-icone {
+  background: #efe6f7;
+  color: #57218a;
+}
+
+.conta-card > strong {
+  display: block;
+  margin-bottom: 6px;
+  color: #30203d;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.conta-card p {
+  margin: 0;
+  color: #9a91a1;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.conta-card-indicador {
+  height: 5px;
+  margin: 15px 0 8px;
+  overflow: hidden;
+  border-radius: 10px;
+  background: #f3e8e9;
+}
+
+.conta-card-indicador-preenchido {
+  display: block;
+  height: 100%;
+  border-radius: 10px;
+  background: #e35d68;
+  transition: width 0.3s ease;
+}
+
+.conta-card > small {
+  color: #9a91a1;
+  font-size: 10px;
+}
+
+/* ALERTA */
+
+.conta-alerta {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  margin-bottom: 20px;
+  padding: 15px 18px;
+  border: 1px solid #f2d99e;
+  border-radius: 10px;
+  background: #fff8e8;
+}
+
+.conta-alerta-icone {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 33px;
+  height: 33px;
+  border-radius: 50%;
+  background: #ffe9b4;
+  color: #a87516;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.conta-alerta strong {
+  color: #936415;
+  font-size: 13px;
+}
+
+.conta-alerta p {
+  margin: 4px 0 0;
+  color: #9c7b3c;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+/* MENSAGENS */
+
+.pagamento-mensagem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 17px;
+  padding: 13px 16px;
+  border-radius: 9px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.pagamento-mensagem > span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  font-weight: 700;
+}
+
+.pagamento-erro {
+  border: 1px solid #f5cbd0;
+  background: #fdebed;
+  color: #b83242;
+}
+
+.pagamento-erro > span {
+  background: #f8d3d7;
+}
+
+.pagamento-sucesso {
+  border: 1px solid #c3ead8;
+  background: #e4f6ee;
+  color: #16845e;
+}
+
+.pagamento-sucesso > span {
+  background: #c9ecdc;
+}
+
+/* FORMULÁRIOS LADO A LADO */
+
+.conta-formularios-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 17px;
+  margin-bottom: 18px;
+}
+
+/* SEÇÕES */
+
+.conta-section {
+  min-width: 0;
+  margin-bottom: 18px;
+  padding: 21px;
+  border: 1px solid #ebe5f0;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 3px 12px rgba(49, 16, 79, 0.035);
+}
+
+.conta-formularios-grid .conta-section {
+  margin-bottom: 0;
+}
+
+.conta-section-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 21px;
+}
+
+.conta-section-header > div:last-of-type {
+  min-width: 0;
+}
+
+.conta-section-header h2 {
+  margin: 0 0 5px;
+  color: #352342;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.conta-section-header p {
+  margin: 0;
+  color: #968c9e;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.conta-section-icone {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 37px;
+  height: 37px;
+  border-radius: 9px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.conta-icone-pagamento {
+  background: #e4f6ee;
+  color: #16845e;
+}
+
+.conta-icone-estorno {
+  background: #fdebed;
+  color: #c94753;
+}
+
+.conta-icone-consumo {
+  background: #fff4d9;
+  color: #a87516;
+}
+
+.conta-icone-extrato {
+  background: #efe6f7;
+  color: #57218a;
+}
+
+.conta-contador {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 26px;
+  height: 26px;
+  margin-left: auto;
+  padding: 0 7px;
+  border-radius: 20px;
+  background: #f2edf6;
+  color: #57218a;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+/* FORMULÁRIOS */
+
+.pagamento-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.pagamento-campo {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  min-width: 0;
+}
+
+.pagamento-campo label {
+  color: #51465b;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.pagamento-campo input,
+.pagamento-campo select {
+  width: 100%;
+  height: 42px;
+  padding: 0 12px;
+  border: 1px solid #ded6e6;
+  border-radius: 7px;
+  outline: none;
+  background: #ffffff;
+  color: #30263a;
+  font-family: inherit;
+  font-size: 12px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.pagamento-campo input::placeholder {
+  color: #b1a8b8;
+}
+
+.pagamento-campo input:focus,
+.pagamento-campo select:focus {
+  border-color: #57218a;
+  box-shadow: 0 0 0 3px rgba(87, 33, 138, 0.08);
+}
+
+.pagamento-campo input:disabled,
+.pagamento-campo select:disabled {
+  background: #f7f5f8;
+  cursor: not-allowed;
+}
+
+.btn-registrar-pagamento,
+.btn-registrar-estorno {
+  min-height: 42px;
+  padding: 0 18px;
+  border: none;
+  border-radius: 7px;
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.btn-registrar-pagamento {
+  background: #57218a;
+}
+
+.btn-registrar-pagamento:hover:not(:disabled) {
+  background: #32104f;
+  transform: translateY(-1px);
+}
+
+.btn-registrar-estorno {
+  background: #e35d68;
+}
+
+.btn-registrar-estorno:hover:not(:disabled) {
+  background: #c94753;
+  transform: translateY(-1px);
+}
+
+.btn-registrar-pagamento:disabled,
+.btn-registrar-estorno:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pagamento-sem-divida {
+  margin: 13px 0 0;
+  color: #16845e;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* CONSUMOS */
+
+.conta-lista-consumos {
+  display: flex;
+  flex-direction: column;
+}
+
+.conta-consumo-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  padding: 15px 3px;
+  border-bottom: 1px solid #f0edf2;
+}
+
+.conta-consumo-item:first-child {
+  padding-top: 0;
+}
+
+.conta-consumo-item:last-child {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.conta-consumo-identificacao {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  min-width: 0;
+}
+
+.conta-consumo-icone {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  background: #fff4d9;
+  color: #a87516;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.conta-consumo-item > div,
+.conta-consumo-valores {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.conta-consumo-item strong {
+  color: #51465b;
+  font-size: 12px;
+}
+
+.conta-consumo-item span {
+  color: #928899;
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.conta-consumo-valores {
+  flex-shrink: 0;
+  text-align: right;
+}
+
+.conta-consumo-valores strong {
+  color: #d34c59;
+  font-size: 13px;
+}
+
+.conta-consumo-status {
+  display: inline-block;
+  padding: 4px 7px;
+  border-radius: 12px;
+  background: #fff4d9;
+  color: #a87516 !important;
+  font-size: 9px !important;
+  font-weight: 600;
+}
+
+/* ESTADOS VAZIOS */
+
+.conta-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 30px 15px;
+  text-align: center;
+}
+
+.conta-empty-icone {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  margin-bottom: 10px;
+  border-radius: 50%;
+  background: #e4f6ee;
+  color: #16845e;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.conta-empty strong {
+  color: #51465b;
+  font-size: 12px;
+}
+
+.conta-empty p {
+  margin: 6px 0 0;
+  color: #9a91a1;
+  font-size: 11px;
+}
+
+.conta-empty-compacta {
+  padding: 12px;
+}
+
+/* TABELA DO EXTRATO */
+
+.conta-tabela-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.conta-tabela {
+  width: 100%;
+  min-width: 650px;
+  border-collapse: collapse;
+}
+
+.conta-tabela th {
+  padding: 13px 12px;
+  background: #f8f6fa;
+  color: #82788c;
+  font-size: 10px;
+  font-weight: 700;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.conta-tabela th:first-child {
+  border-radius: 7px 0 0 7px;
+}
+
+.conta-tabela th:last-child {
+  border-radius: 0 7px 7px 0;
+}
+
+.conta-tabela td {
+  padding: 14px 12px;
+  border-bottom: 1px solid #f0edf2;
+  color: #51465b;
+  font-size: 11px;
+  vertical-align: middle;
+}
+
+.conta-tabela tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.conta-tabela tbody tr:hover {
+  background: #fcfbfd;
+}
+
+.conta-tabela-data {
+  white-space: nowrap;
+  color: #82788c !important;
+}
+
+.conta-tabela-descricao {
+  min-width: 180px;
+  max-width: 280px;
+  overflow-wrap: anywhere;
+}
+
+.conta-tabela-saldo {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* TIPOS DE MOVIMENTAÇÃO */
+
+.extrato-tipo {
+  display: inline-block;
+  padding: 5px 9px;
+  border-radius: 15px;
+  font-size: 9px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.extrato-consumo {
+  background: #fdebed;
+  color: #c33f4b;
+}
+
+.extrato-pagamento {
+  background: #e4f6ee;
+  color: #16845e;
+}
+
+.extrato-estorno {
+  background: #fff0f0;
+  color: #c94753;
+}
+
+.extrato-valor-negativo {
+  color: #d34c59 !important;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.extrato-valor-positivo {
+  color: #16845e !important;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.extrato-credito-gerado {
+  display: block;
+  margin-top: 5px;
+  color: #20a779;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+/* ALUNO NÃO ENCONTRADO */
+
+.conta-nao-encontrada {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 350px;
+  padding: 30px;
+  border: 1px solid #ebe5f0;
+  border-radius: 12px;
+  background: #ffffff;
+  text-align: center;
+}
+
+.conta-nao-encontrada-icone {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 45px;
+  height: 45px;
+  margin-bottom: 12px;
+  border-radius: 50%;
+  background: #fdebed;
+  color: #c94753;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.conta-nao-encontrada h2 {
+  margin: 0 0 7px;
+  color: #352342;
+  font-size: 19px;
+}
+
+.conta-nao-encontrada p {
+  margin: 0 0 20px;
+  color: #928899;
+  font-size: 12px;
+}
+
+.conta-nao-encontrada button {
+  padding: 10px 17px;
+  border: none;
+  border-radius: 7px;
+  background: #57218a;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* RESPONSIVIDADE */
+
+@media (max-width: 1100px) {
+  .conta-resumo {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .conta-formularios-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 700px) {
+  .conta-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .conta-header h1 {
+    font-size: 20px;
+  }
+
+  .conta-dados-aluno {
+    gap: 6px;
+  }
+
+  .conta-section {
+    padding: 16px;
+  }
+
+  .conta-card {
+    padding: 15px;
+  }
+
+  .conta-card > strong {
+    font-size: 19px;
+  }
+}
+
+@media (max-width: 480px) {
+  .conta-resumo {
+    grid-template-columns: 1fr;
+  }
+
+  .conta-identificacao {
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .conta-avatar {
+    width: 48px;
+    height: 48px;
+    font-size: 17px;
+  }
+
+  .conta-dado-separador {
+    display: none;
+  }
+
+  .conta-dados-aluno {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .conta-consumo-item {
+    align-items: flex-start;
+  }
+}

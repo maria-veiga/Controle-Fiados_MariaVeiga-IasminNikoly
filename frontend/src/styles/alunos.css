@@ -1,0 +1,369 @@
+
+.alunos-page {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.alunos-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.alunos-topbar h1 {
+  font-size: 24px;
+  color: #32104f;
+  margin-bottom: 6px;
+}
+
+.alunos-topbar p {
+  font-size: 13px;
+  color: #77717f;
+}
+
+.btn-novo-aluno {
+  background: #57218a;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 18px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-novo-aluno:hover,
+.btn-salvar-aluno:hover {
+  background: #32104f;
+}
+
+/* Indicadores */
+.alunos-summary {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+}
+
+.alunos-summary-card {
+  background: #ffffff;
+  border: 1px solid #ece7f0;
+  border-radius: 10px;
+  padding: 17px 19px;
+}
+
+.alunos-summary-card span {
+  display: block;
+  color: #77717f;
+  font-size: 11px;
+  margin-bottom: 10px;
+}
+
+.alunos-summary-card strong {
+  color: #32104f;
+  font-size: 23px;
+}
+
+/* Tabela */
+.alunos-table-card {
+  background: white;
+  border: 1px solid #ece7f0;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.alunos-table-header h2 {
+  font-size: 15px;
+  color: #32104f;
+  margin-bottom: 5px;
+}
+
+.alunos-table-header p {
+  color: #918999;
+  font-size: 11px;
+}
+
+/* Pesquisa e filtros */
+.alunos-filters {
+  display: flex;
+  gap: 12px;
+  margin: 20px 0;
+}
+
+.alunos-search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  border: 1px solid #e5dfe9;
+  border-radius: 8px;
+  padding: 0 12px;
+  height: 40px;
+}
+
+.alunos-search span {
+  color: #918999;
+  font-size: 20px;
+}
+
+.alunos-search input {
+  width: 100%;
+  border: none;
+  outline: none;
+  font-size: 12px;
+  color: #514a58;
+}
+
+.alunos-filters select {
+  width: 190px;
+  border: 1px solid #e5dfe9;
+  border-radius: 8px;
+  padding: 0 12px;
+  color: #514a58;
+  background: white;
+  font-size: 12px;
+  outline: none;
+}
+
+/* Estrutura da tabela */
+.alunos-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.alunos-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.alunos-table th {
+  background: #faf9fb;
+  color: #918999;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 14px 12px;
+  white-space: nowrap;
+  border-bottom: 1px solid #eeeaf1;
+}
+
+.alunos-table td {
+  color: #625b69;
+  font-size: 11px;
+  padding: 16px 12px;
+  border-bottom: 1px solid #f1eef3;
+  white-space: nowrap;
+}
+
+.alunos-table tbody tr:hover {
+  background: #fcfaff;
+}
+
+.aluno-nome {
+  color: #32104f !important;
+  font-weight: 600;
+}
+
+.aluno-saldo {
+  font-weight: 600;
+  color: #32104f !important;
+}
+
+/* Situações */
+.aluno-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 11px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 600;
+  border: 1px solid transparent;
+}
+
+.aluno-status-ativo {
+  background: #e4f7ef;
+  color: #16845f;
+  border-color: #c4ead9;
+}
+
+.aluno-status-atencao {
+  background: #fff4cc;
+  color: #a87500;
+  border-color: #f2d477;
+}
+
+.aluno-status-bloqueado {
+  background: #fde8e9;
+  color: #d64c59;
+  border-color: #f5c7cb;
+}
+
+/* Ações */
+.btn-acao {
+  background: transparent;
+  border: none;
+  color: #57218a;
+  font-size: 16px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.btn-acao:hover {
+  color: #32104f;
+}
+
+.alunos-empty {
+  text-align: center;
+  padding: 30px !important;
+  color: #918999 !important;
+}
+
+/* Rodapé */
+.alunos-table-footer {
+  border-top: 1px solid #eeeaf1;
+  padding-top: 15px;
+  margin-top: 5px;
+  color: #918999;
+  font-size: 11px;
+}
+
+/* Modal de cadastro */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(31, 15, 43, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.modal-aluno {
+  width: 100%;
+  max-width: 480px;
+  background: white;
+  border-radius: 14px;
+  padding: 25px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+.modal-aluno-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 22px;
+}
+
+.modal-aluno-header h2 {
+  color: #32104f;
+  font-size: 19px;
+  margin-bottom: 5px;
+}
+
+.modal-aluno-header p {
+  color: #918999;
+  font-size: 11px;
+}
+
+.modal-close {
+  border: none;
+  background: transparent;
+  color: #77717f;
+  font-size: 25px;
+  cursor: pointer;
+}
+
+.modal-aluno form {
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-aluno form label {
+  color: #514a58;
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 7px;
+}
+
+.modal-aluno form input {
+  height: 42px;
+  border: 1px solid #e5dfe9;
+  border-radius: 8px;
+  padding: 0 12px;
+  outline: none;
+  margin-bottom: 17px;
+  font-size: 12px;
+}
+
+.modal-aluno form input:focus {
+  border-color: #57218a;
+}
+
+.modal-aluno-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 5px;
+}
+
+.btn-cancelar,
+.btn-salvar-aluno {
+  padding: 11px 15px;
+  border-radius: 8px;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.btn-cancelar {
+  background: white;
+  color: #625b69;
+  border: 1px solid #e5dfe9;
+}
+
+.btn-salvar-aluno {
+  background: #57218a;
+  color: white;
+  border: none;
+}
+
+/* Responsividade */
+@media (max-width: 1100px) {
+  .alunos-summary {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 650px) {
+  .alunos-topbar {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .alunos-filters {
+    flex-direction: column;
+  }
+
+  .alunos-filters select {
+    width: 100%;
+    height: 40px;
+  }
+}
+
+.aluno-nome-link {
+  background: none;
+  border: none;
+  padding: 0;
+  color: #57218A;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: left;
+}
+
+.aluno-nome-link:hover {
+  text-decoration: underline;
+  color: #32104F;
+}

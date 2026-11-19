@@ -1,0 +1,246 @@
+
+.lancamentos-page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  color: #32104F;
+}
+
+.lancamentos-intro h1 {
+  margin: 0 0 6px;
+  font-size: 24px;
+}
+
+.lancamentos-intro p,
+.ultimos-lancamentos-header p {
+  margin: 0;
+  color: #77717F;
+  font-size: 14px;
+}
+
+.lancamentos-layout {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+.lancamento-form-card,
+.lancamento-info-card,
+.ultimos-lancamentos-card {
+  background: #FFFFFF;
+  border: 1px solid #EAE5EF;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(50, 16, 79, 0.04);
+}
+
+.lancamento-form-card h2,
+.lancamento-info-card h2,
+.ultimos-lancamentos-header h2 {
+  margin: 0 0 8px;
+  font-size: 18px;
+  color: #32104F;
+}
+
+.lancamento-subtitulo {
+  margin: 0 0 24px;
+  color: #817B88;
+  font-size: 13px;
+}
+
+.lancamento-campo {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.lancamento-campo label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #463653;
+}
+
+.lancamento-campo input,
+.lancamento-campo select {
+  width: 100%;
+  height: 44px;
+  padding: 0 12px;
+  border: 1px solid #DED7E6;
+  border-radius: 8px;
+  outline: none;
+  background: #FFFFFF;
+  color: #32104F;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.lancamento-campo input:focus,
+.lancamento-campo select:focus {
+  border-color: #57218A;
+  box-shadow: 0 0 0 3px rgba(87, 33, 138, 0.08);
+}
+
+.lancamento-aluno-info {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  padding: 14px;
+  margin-bottom: 20px;
+  background: #F8F5FA;
+  border-radius: 8px;
+}
+
+.lancamento-aluno-info div {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.lancamento-aluno-info span {
+  color: #817B88;
+  font-size: 11px;
+}
+
+.lancamento-aluno-info strong {
+  color: #32104F;
+  font-size: 13px;
+}
+
+.lancamento-aluno-info .credito-valor {
+  color: #20A779;
+}
+
+.btn-registrar-consumo {
+  width: 100%;
+  height: 46px;
+  border: none;
+  border-radius: 8px;
+  background: #57218A;
+  color: #FFFFFF;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-registrar-consumo:hover {
+  background: #32104F;
+}
+
+.lancamento-mensagem {
+  padding: 12px;
+  margin-bottom: 16px;
+  border-radius: 8px;
+  font-size: 13px;
+}
+
+.lancamento-mensagem.erro {
+  background: #FDEEEF;
+  color: #B83240;
+}
+
+.lancamento-mensagem.sucesso {
+  background: #E9F8F1;
+  color: #167B57;
+}
+
+.lancamento-info-card {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.lancamento-info-card h2 {
+  margin-bottom: 4px;
+}
+
+.lancamento-regra {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.regra-icone {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #F0E8F8;
+  color: #57218A;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.lancamento-regra strong {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 13px;
+  color: #463653;
+}
+
+.lancamento-regra p {
+  margin: 0;
+  color: #817B88;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.ultimos-lancamentos-header {
+  margin-bottom: 20px;
+}
+
+.tabela-lancamentos-container {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.tabela-lancamentos {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.tabela-lancamentos th {
+  padding: 12px;
+  background: #F8F5FA;
+  color: #817B88;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.tabela-lancamentos td {
+  padding: 14px 12px;
+  border-bottom: 1px solid #F0ECF3;
+  color: #463653;
+  font-size: 13px;
+}
+
+.lancamentos-vazio {
+  padding: 30px;
+  text-align: center;
+  color: #817B88;
+  font-size: 13px;
+}
+
+@media (max-width: 900px) {
+  .lancamentos-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .lancamento-form-card,
+  .lancamento-info-card,
+  .ultimos-lancamentos-card {
+    padding: 16px;
+  }
+
+  .lancamento-aluno-info {
+    grid-template-columns: 1fr;
+  }
+}

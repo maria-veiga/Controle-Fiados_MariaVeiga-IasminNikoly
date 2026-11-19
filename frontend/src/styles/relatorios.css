@@ -1,0 +1,418 @@
+
+.relatorios-page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding-bottom: 30px;
+  color: #32104f;
+}
+
+.relatorios-filtros {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  gap: 16px;
+  padding: 18px 20px;
+  background: #ffffff;
+  border: 1px solid #eee8f3;
+  border-radius: 12px;
+}
+
+.relatorio-filtro {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  min-width: 190px;
+}
+
+.relatorio-filtro label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #51445d;
+}
+
+.relatorio-filtro select {
+  width: 100%;
+  height: 40px;
+  padding: 0 12px;
+  border: 1px solid #ded5e7;
+  border-radius: 7px;
+  background: #ffffff;
+  color: #32104f;
+  font-size: 13px;
+  outline: none;
+}
+
+.relatorio-filtro select:focus {
+  border-color: #57218a;
+}
+
+.relatorios-indicadores {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.relatorio-card {
+  min-width: 0;
+  padding: 20px;
+  background: #ffffff;
+  border: 1px solid #eee8f3;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(50, 16, 79, 0.03);
+}
+
+.relatorio-card-topo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.relatorio-icone {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 9px;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.icone-verde {
+  color: #16865f;
+  background: #e5f6ef;
+}
+
+.icone-roxo {
+  color: #57218a;
+  background: #f0e8f8;
+}
+
+.icone-laranja {
+  color: #b76b16;
+  background: #fff2df;
+}
+
+.icone-vermelho {
+  color: #d64d5b;
+  background: #fdebed;
+}
+
+.relatorio-card-legenda {
+  color: #746b7c;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.relatorio-card > strong {
+  display: block;
+  margin-bottom: 7px;
+  color: #32104f;
+  font-size: 24px;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.relatorio-card > p {
+  margin: 0;
+  color: #918899;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.relatorio-section {
+  padding: 22px;
+  background: #ffffff;
+  border: 1px solid #eee8f3;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(50, 16, 79, 0.03);
+}
+
+.relatorio-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.relatorio-section-header h2 {
+  margin: 0 0 6px;
+  color: #32104f;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.relatorio-section-header p {
+  margin: 0;
+  color: #8b8292;
+  font-size: 13px;
+}
+
+.relatorio-contagem {
+  padding: 7px 12px;
+  color: #57218a;
+  background: #f0e8f8;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* GRÁFICO DE FATURAMENTO */
+
+.grafico-faturamento {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 30px;
+  min-height: 220px;
+  padding: 15px 10px 0;
+  overflow-x: auto;
+}
+
+.barra-mes {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  flex: 1;
+  min-width: 75px;
+  max-width: 140px;
+  height: 210px;
+}
+
+.barra-mes-valor {
+  margin-bottom: 9px;
+  color: #6f627a;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.barra-mes-area {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  width: 100%;
+  height: 150px;
+  border-bottom: 1px solid #e9e1ef;
+  background: linear-gradient(
+    to bottom,
+    transparent 24%,
+    #f8f5fa 25%,
+    transparent 26%,
+    transparent 49%,
+    #f8f5fa 50%,
+    transparent 51%,
+    transparent 74%,
+    #f8f5fa 75%,
+    transparent 76%
+  );
+}
+
+.barra-mes-preenchimento {
+  width: 48px;
+  min-height: 5px;
+  background: #57218a;
+  border-radius: 7px 7px 0 0;
+  transition: height 0.3s ease;
+}
+
+.barra-mes-label {
+  margin-top: 10px;
+  color: #766c80;
+  font-size: 12px;
+  text-transform: capitalize;
+}
+
+/* CONSUMO POR TURMA */
+
+.consumo-turmas {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.consumo-turma-item {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.consumo-turma-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.consumo-turma-info strong {
+  color: #51445d;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.consumo-turma-info span {
+  color: #32104f;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.consumo-turma-trilho {
+  width: 100%;
+  height: 11px;
+  overflow: hidden;
+  background: #f0eaf5;
+  border-radius: 20px;
+}
+
+.consumo-turma-barra {
+  height: 100%;
+  background: #7540a2;
+  border-radius: 20px;
+  transition: width 0.3s ease;
+}
+
+/* TABELAS */
+
+.relatorio-tabela-container {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.relatorio-tabela {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.relatorio-tabela thead {
+  background: #f8f5fa;
+}
+
+.relatorio-tabela th {
+  padding: 14px 15px;
+  color: #766c80;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.relatorio-tabela td {
+  padding: 15px;
+  border-bottom: 1px solid #f0ecf3;
+  color: #51445d;
+  font-size: 13px;
+}
+
+.relatorio-tabela tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.relatorio-tabela tbody tr:hover {
+  background: #fcfaff;
+}
+
+.valor-destaque {
+  color: #32104f !important;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.relatorio-status {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.status-atencao {
+  color: #a76813;
+  background: #fff2d9;
+}
+
+.status-bloqueado {
+  color: #c13f4b;
+  background: #fdebed;
+}
+
+/* ESTADOS VAZIOS */
+
+.relatorio-vazio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 145px;
+  padding: 20px;
+  color: #95899e;
+  text-align: center;
+}
+
+.relatorio-vazio span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  color: #7540a2;
+  background: #f2ecf7;
+  border-radius: 50%;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.relatorio-vazio p {
+  margin: 0;
+  font-size: 13px;
+}
+
+.relatorio-observacao {
+  margin: 0;
+  color: #918899;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+/* RESPONSIVIDADE */
+
+@media (max-width: 1100px) {
+  .relatorios-indicadores {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 650px) {
+  .relatorios-filtros {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .relatorio-filtro {
+    width: 100%;
+  }
+
+  .relatorios-indicadores {
+    grid-template-columns: 1fr;
+  }
+
+  .relatorio-section {
+    padding: 16px;
+  }
+
+  .relatorio-section-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .grafico-faturamento {
+    justify-content: flex-start;
+  }
+}

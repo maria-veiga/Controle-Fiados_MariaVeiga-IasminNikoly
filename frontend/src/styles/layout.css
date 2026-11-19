@@ -1,0 +1,55 @@
+
+.app-layout {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+}
+
+.main-area {
+  flex: 1;
+  min-width: 0;
+  padding: 28px 32px;
+}
+
+.page-content {
+  width: 100%;
+  max-width: 1500px;
+  margin: 0 auto;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 28px;
+}
+
+.page-header h1 {
+  font-size: 23px;
+  color: #32104f;
+}
+
+.page-header p {
+  color: #898391;
+  font-size: 13px;
+  margin-top: 6px;
+}
+
+@media (max-width: 1100px) {
+  .main-area {
+    padding: 22px 18px;
+  }
+}
+
+
+.header-info {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  font-size: 11px;
+  color: #898391;
+}
+
+.header-info span:first-child {
+  color: #20a779;
+}
