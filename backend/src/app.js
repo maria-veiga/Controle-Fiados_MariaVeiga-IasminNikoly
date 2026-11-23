@@ -1,9 +1,11 @@
+
 const express = require('express');
 const app = express();
 
 const alunosRoutes = require('./routes/alunos');
 const fiadosRoutes = require('./routes/fiados');
 const pagamentosRoutes = require('./routes/pagamentos');
+const authRoutes = require('./routes/auth');
 
 app.use(express.json());
 
@@ -15,6 +17,9 @@ app.get('/api/health', (req, res) => {
   });
 });
 
+// Rotas de autenticação
+app.use('/api/auth', authRoutes);
+
 // Rotas de alunos
 app.use('/api/alunos', alunosRoutes);
 
@@ -24,7 +29,7 @@ app.use('/api/fiados', fiadosRoutes);
 // Rotas de pagamentos
 app.use('/api/pagamentos', pagamentosRoutes);
 
-// Rota para endereços não encontrados
+// Rotas não encontradas
 app.use((req, res) => {
   res.status(404).json({
     error: 'Rota não encontrada'

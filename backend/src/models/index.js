@@ -2,6 +2,7 @@
 const Aluno = require('./Aluno');
 const Fiado = require('./Fiado');
 const Pagamento = require('./Pagamento');
+const Usuario = require('./Usuario');
 
 // Um aluno pode ter vários fiados.
 Aluno.hasMany(Fiado, {
@@ -30,5 +31,6 @@ Pagamento.belongsTo(Fiado, {
 module.exports = {
   Aluno,
   Fiado,
-  Pagamento
+  Pagamento,
+  Usuario
 };

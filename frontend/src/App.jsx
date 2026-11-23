@@ -1,3 +1,4 @@
+
 import {
   BrowserRouter,
   Routes,
@@ -15,6 +16,7 @@ import Lancamentos from "./pages/Lancamentos";
 import Relatorios from "./pages/Relatorios";
 import Configuracoes from "./pages/Configuracoes";
 import Perfil from "./pages/Perfil";
+import Login from "./pages/Login";
 
 import { AlunosProvider } from "./context/AlunosContext";
 
@@ -32,7 +34,7 @@ function AppLayout() {
 
           <div className="page-content">
             <Routes>
-              <Route path="/" element={<Home />} />
+              <Route path="/home" element={<Home />} />
               <Route path="/alunos" element={<Alunos />} />
               <Route path="/alunos/:id" element={<ContaAluno />} />
               <Route path="/lancamentos" element={<Lancamentos />} />
@@ -40,10 +42,7 @@ function AppLayout() {
               <Route path="/configuracoes" element={<Configuracoes />} />
               <Route path="/perfil" element={<Perfil />} />
 
-              <Route
-                path="*"
-                element={<Navigate to="/" replace />}
-              />
+              <Route path="*" element={<Navigate to="/home" replace />} />
             </Routes>
           </div>
         </main>
@@ -56,10 +55,8 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route
-          path="/login"
-          element={<h1>Login em desenvolvimento</h1>}
-        />
+        <Route path="/" element={<Login />} />
+        <Route path="/login" element={<Login />} />
 
         <Route path="/*" element={<AppLayout />} />
       </Routes>
