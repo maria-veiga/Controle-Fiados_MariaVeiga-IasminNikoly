@@ -82,6 +82,16 @@
   box-shadow: 0 0 0 3px rgba(87, 33, 138, 0.08);
 }
 
+.lancamento-ajuda {
+  color: #817B88;
+  font-size: 11px;
+}
+
+.lancamento-sem-resultado {
+  color: #B83240;
+  font-size: 12px;
+}
+
 .lancamento-aluno-info {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -227,6 +237,80 @@
   font-size: 13px;
 }
 
+/* Seleção entre compra à vista e a prazo */
+
+.modalidade-opcoes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.modalidade-opcao {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 13px;
+  border: 1px solid #DED7E6;
+  border-radius: 8px;
+  background: #FFFFFF;
+  color: #463653;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.modalidade-opcao span {
+  color: #817B88;
+  font-size: 11px;
+  font-weight: 400;
+}
+
+.modalidade-opcao:hover {
+  border-color: #57218A;
+}
+
+.modalidade-opcao.ativa {
+  border: 2px solid #57218A;
+  background: #F8F5FA;
+  color: #57218A;
+}
+
+/* Avisos das modalidades */
+
+.aviso-avista,
+.aviso-prazo {
+  padding: 13px 15px;
+  margin-bottom: 18px;
+  border-radius: 8px;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.aviso-avista {
+  background: #E9F8F1;
+  color: #167B57;
+}
+
+.aviso-prazo {
+  background: #F8F5FA;
+  color: #57218A;
+}
+
+.aviso-avista strong,
+.aviso-prazo strong {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 13px;
+}
+
+.aviso-avista p,
+.aviso-prazo p {
+  margin: 0;
+}
+
 @media (max-width: 900px) {
   .lancamentos-layout {
     grid-template-columns: 1fr;
@@ -241,6 +325,10 @@
   }
 
   .lancamento-aluno-info {
+    grid-template-columns: 1fr;
+  }
+
+  .modalidade-opcoes {
     grid-template-columns: 1fr;
   }
 }

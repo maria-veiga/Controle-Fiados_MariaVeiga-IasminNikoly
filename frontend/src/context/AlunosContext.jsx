@@ -126,18 +126,18 @@ export function AlunosProvider({ children }) {
   const [estornos, setEstornos] = useState([]);
   const [creditosUtilizados, setCreditosUtilizados] = useState([]);
 
-  // Gera identificadores novos para os lançamentos.
   function gerarId(lista) {
-    return lista.reduce(
-      (maiorId, item) => Math.max(maiorId, Number(item.id) || 0),
-      0
-    ) + 1;
+    return (
+      lista.reduce(
+        (maiorId, item) => Math.max(maiorId, Number(item.id) || 0),
+        0
+      ) + 1
+    );
   }
 
-  // REGISTRAR PAGAMENTO
+  // REGISTRAR PAGAMENTO DE UMA DÍVIDA
   function registrarPagamento(alunoId, valor, formaPagamento) {
     const idAluno = Number(alunoId);
-
     const aluno = alunos.find((item) => item.id === idAluno);
 
     if (!aluno) {
@@ -188,7 +188,6 @@ export function AlunosProvider({ children }) {
       const valorTotal = Math.round(Number(consumo.valor) * 100);
       const jaPago = Math.round(Number(consumo.valorPago) * 100);
       const faltaPagar = valorTotal - jaPago;
-
       const aplicado = Math.min(restante, faltaPagar);
 
       consumo.valorPago = (jaPago + aplicado) / 100;
@@ -271,7 +270,10 @@ export function AlunosProvider({ children }) {
         0
       ) / 100;
 
-    const creditoGerado = valorPago / 100;
+    // Compra à vista não gera crédito de conta no estorno.
+    const creditoGerado = consumo.pagamentoAvista
+      ? 0
+      : valorPago / 100;
 
     const novoCredito =
       Math.round(
@@ -285,7 +287,7 @@ export function AlunosProvider({ children }) {
       consumoId: idConsumo,
       alunoId: aluno.id,
       valor: valorTotal / 100,
-      valorPago: creditoGerado,
+      valorPago: consumo.pagamentoAvista ? 0 : creditoGerado,
       valorRetiradoDaDivida: valorPendente / 100,
       creditoGerado,
       motivo: justificativa,
@@ -326,13 +328,10 @@ export function AlunosProvider({ children }) {
     return novoEstorno;
   }
 
-  // REGISTRAR NOVO CONSUMO COM UTILIZAÇÃO AUTOMÁTICA DE CRÉDITO
+  // REGISTRAR CONSUMO A PRAZO COM UTILIZAÇÃO AUTOMÁTICA DE CRÉDITO
   function registrarConsumo(alunoId, descricao, valor) {
     const idAluno = Number(alunoId);
-
-    const aluno = alunos.find(
-      (item) => item.id === idAluno
-    );
+    const aluno = alunos.find((item) => item.id === idAluno);
 
     if (!aluno) {
       throw new Error("Aluno não encontrado.");
@@ -359,13 +358,11 @@ export function AlunosProvider({ children }) {
       Number(aluno.credito || 0) * 100
     );
 
-    // Primeiro utiliza o crédito que o aluno possui.
     const creditoUtilizado = Math.min(
       creditoDisponivel,
       valorEmCentavos
     );
 
-    // Somente o restante será adicionado à dívida.
     const valorRestante = valorEmCentavos - creditoUtilizado;
 
     const saldoAtual = Math.round(Number(aluno.saldo) * 100);
@@ -385,23 +382,24 @@ export function AlunosProvider({ children }) {
       valor: valorConsumo,
       valorPago: creditoUtilizado / 100,
       creditoUtilizado: creditoUtilizado / 100,
+      pagamentoAvista: false,
       estornado: false,
     };
 
     const novoSaldo = (saldoAtual + valorRestante) / 100;
-
     const novoCredito =
       (creditoDisponivel - creditoUtilizado) / 100;
 
-    const novoRegistroCredito = creditoUtilizado > 0
-      ? {
-          id: gerarId(creditosUtilizados),
-          alunoId: idAluno,
-          consumoId: novoConsumo.id,
-          valor: creditoUtilizado / 100,
-          data: novoConsumo.data,
-        }
-      : null;
+    const novoRegistroCredito =
+      creditoUtilizado > 0
+        ? {
+            id: gerarId(creditosUtilizados),
+            alunoId: idAluno,
+            consumoId: novoConsumo.id,
+            valor: creditoUtilizado / 100,
+            data: novoConsumo.data,
+          }
+        : null;
 
     setConsumos((listaAtual) => [
       ...listaAtual,
@@ -436,6 +434,57 @@ export function AlunosProvider({ children }) {
     return novoConsumo;
   }
 
+  // REGISTRAR CONSUMO PAGO À VISTA
+  function registrarConsumoAvista(
+    alunoId,
+    descricao,
+    valor,
+    formaPagamento
+  ) {
+    const idAluno = Number(alunoId);
+    const aluno = alunos.find((item) => item.id === idAluno);
+
+    if (!aluno) {
+      throw new Error("Aluno não encontrado.");
+    }
+
+    const descricaoConsumo = String(descricao || "").trim();
+    const valorConsumo = Math.round(Number(valor) * 100) / 100;
+    const formasValidas = ["Dinheiro", "Pix", "Cartão"];
+
+    if (!descricaoConsumo) {
+      throw new Error("Informe a descrição do consumo.");
+    }
+
+    if (!Number.isFinite(valorConsumo) || valorConsumo <= 0) {
+      throw new Error("Informe um valor válido.");
+    }
+
+    if (!formasValidas.includes(formaPagamento)) {
+      throw new Error("Selecione uma forma de pagamento válida.");
+    }
+
+    const novoConsumo = {
+      id: gerarId(consumos),
+      alunoId: idAluno,
+      descricao: descricaoConsumo,
+      data: new Date().toISOString(),
+      valor: valorConsumo,
+      valorPago: valorConsumo,
+      creditoUtilizado: 0,
+      formaPagamento,
+      pagamentoAvista: true,
+      estornado: false,
+    };
+
+    setConsumos((listaAtual) => [
+      ...listaAtual,
+      novoConsumo,
+    ]);
+
+    return novoConsumo;
+  }
+
   return (
     <AlunosContext.Provider
       value={{
@@ -449,6 +498,7 @@ export function AlunosProvider({ children }) {
         registrarPagamento,
         estornarConsumo,
         registrarConsumo,
+        registrarConsumoAvista,
       }}
     >
       {children}

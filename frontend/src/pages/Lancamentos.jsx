@@ -4,11 +4,19 @@ import { useAlunos } from "../context/AlunosContext";
 import "../styles/lancamentos.css";
 
 function Lancamentos() {
-  const { alunos, consumos, registrarConsumo } = useAlunos();
+  const {
+    alunos,
+    consumos,
+    registrarConsumo,
+    registrarConsumoAvista,
+  } = useAlunos();
 
   const [alunoId, setAlunoId] = useState("");
+  const [buscaAluno, setBuscaAluno] = useState("");
   const [descricao, setDescricao] = useState("");
   const [valor, setValor] = useState("");
+  const [modalidade, setModalidade] = useState("prazo");
+  const [formaPagamento, setFormaPagamento] = useState("Dinheiro");
   const [mensagem, setMensagem] = useState("");
   const [erro, setErro] = useState("");
 
@@ -18,6 +26,26 @@ function Lancamentos() {
       currency: "BRL",
     });
   }
+
+  function normalizarTexto(texto) {
+    return String(texto || "")
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase()
+      .trim();
+  }
+
+  const alunosFiltrados = alunos.filter((aluno) => {
+    const pesquisa = normalizarTexto(buscaAluno);
+    const nome = normalizarTexto(aluno.nome);
+    const matricula = normalizarTexto(aluno.matricula);
+
+    return nome.includes(pesquisa) || matricula.includes(pesquisa);
+  });
+
+  const alunoSelecionado = alunos.find(
+    (aluno) => aluno.id === Number(alunoId)
+  );
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -29,29 +57,39 @@ function Lancamentos() {
       return;
     }
 
-    const resultado = registrarConsumo(
-      Number(alunoId),
-      descricao.trim(),
-      Number(valor)
-    );
+    try {
+      if (modalidade === "avista") {
+        registrarConsumoAvista(
+          Number(alunoId),
+          descricao.trim(),
+          Number(valor),
+          formaPagamento
+        );
 
-    if (resultado === false || resultado?.erro) {
+        setMensagem("Compra à vista registrada com sucesso!");
+      } else {
+        registrarConsumo(
+          Number(alunoId),
+          descricao.trim(),
+          Number(valor)
+        );
+
+        setMensagem("Consumo a prazo registrado com sucesso!");
+      }
+
+      setAlunoId("");
+      setBuscaAluno("");
+      setDescricao("");
+      setValor("");
+      setModalidade("prazo");
+      setFormaPagamento("Dinheiro");
+    } catch (error) {
       setErro(
-        resultado?.erro ||
-        "Não foi possível registrar o consumo. Verifique os dados e o limite disponível."
+        error.message ||
+          "Não foi possível registrar o lançamento."
       );
-      return;
     }
-
-    setMensagem("Consumo registrado com sucesso!");
-    setAlunoId("");
-    setDescricao("");
-    setValor("");
   }
-
-  const alunoSelecionado = alunos.find(
-    (aluno) => aluno.id === Number(alunoId)
-  );
 
   const ultimosConsumos = [...consumos]
     .filter((consumo) => !consumo.estornado)
@@ -62,38 +100,115 @@ function Lancamentos() {
     <div className="lancamentos-page">
       <div className="lancamentos-intro">
         <h1>Novo lançamento</h1>
-        <p>Registre os consumos realizados pelos alunos na cantina.</p>
+        <p>
+          Registre compras pagas na hora ou consumos adicionados à conta dos alunos.
+        </p>
       </div>
 
       <div className="lancamentos-layout">
         <section className="lancamento-form-card">
-          <h2>Registrar consumo</h2>
+          <h2>Registrar lançamento</h2>
+
           <p className="lancamento-subtitulo">
-            Informe os dados do consumo para adicioná-lo à conta do aluno.
+            Escolha a modalidade e informe os dados da compra.
           </p>
 
           <form onSubmit={handleSubmit}>
             <div className="lancamento-campo">
+              <label>Tipo de lançamento</label>
+
+              <div className="modalidade-opcoes">
+                <button
+                  type="button"
+                  className={
+                    modalidade === "prazo"
+                      ? "modalidade-opcao ativa"
+                      : "modalidade-opcao"
+                  }
+                  onClick={() => {
+                    setModalidade("prazo");
+                    setErro("");
+                    setMensagem("");
+                  }}
+                >
+                  A prazo
+                  <span>Adicionar à dívida</span>
+                </button>
+
+                <button
+                  type="button"
+                  className={
+                    modalidade === "avista"
+                      ? "modalidade-opcao ativa"
+                      : "modalidade-opcao"
+                  }
+                  onClick={() => {
+                    setModalidade("avista");
+                    setErro("");
+                    setMensagem("");
+                  }}
+                >
+                  À vista
+                  <span>Pagamento imediato</span>
+                </button>
+              </div>
+            </div>
+
+            <div className="lancamento-campo">
+              <label htmlFor="buscaAluno">Buscar aluno</label>
+
+              <input
+                id="buscaAluno"
+                type="text"
+                placeholder="Digite o nome ou a matrícula do aluno"
+                value={buscaAluno}
+                onChange={(e) => {
+                  setBuscaAluno(e.target.value);
+                  setAlunoId("");
+                  setErro("");
+                  setMensagem("");
+                }}
+                autoComplete="off"
+              />
+
+              <span className="lancamento-ajuda">
+                {buscaAluno
+                  ? `${alunosFiltrados.length} aluno(s) encontrado(s)`
+                  : "Pesquise pelo nome ou número de matrícula."}
+              </span>
+            </div>
+
+            <div className="lancamento-campo">
               <label htmlFor="aluno">Aluno</label>
+
               <select
                 id="aluno"
                 value={alunoId}
                 onChange={(e) => setAlunoId(e.target.value)}
               >
                 <option value="">Selecione um aluno</option>
-                {alunos.map((aluno) => (
+
+                {alunosFiltrados.map((aluno) => (
                   <option key={aluno.id} value={aluno.id}>
-                    {aluno.nome} — {aluno.turma}
+                    {aluno.nome} — {aluno.matricula || "Sem matrícula"}
                   </option>
                 ))}
               </select>
+
+              {buscaAluno && alunosFiltrados.length === 0 && (
+                <span className="lancamento-sem-resultado">
+                  Nenhum aluno encontrado. Verifique o nome ou a matrícula.
+                </span>
+              )}
             </div>
 
             {alunoSelecionado && (
               <div className="lancamento-aluno-info">
                 <div>
                   <span>Saldo devedor</span>
-                  <strong>{formatarMoeda(alunoSelecionado.saldo)}</strong>
+                  <strong>
+                    {formatarMoeda(alunoSelecionado.saldo)}
+                  </strong>
                 </div>
 
                 <div>
@@ -105,13 +220,16 @@ function Lancamentos() {
 
                 <div>
                   <span>Limite de crédito</span>
-                  <strong>{formatarMoeda(alunoSelecionado.limite)}</strong>
+                  <strong>
+                    {formatarMoeda(alunoSelecionado.limite)}
+                  </strong>
                 </div>
               </div>
             )}
 
             <div className="lancamento-campo">
-              <label htmlFor="descricao">Descrição do consumo</label>
+              <label htmlFor="descricao">Descrição da compra</label>
+
               <input
                 id="descricao"
                 type="text"
@@ -123,6 +241,7 @@ function Lancamentos() {
 
             <div className="lancamento-campo">
               <label htmlFor="valor">Valor (R$)</label>
+
               <input
                 id="valor"
                 type="number"
@@ -134,16 +253,60 @@ function Lancamentos() {
               />
             </div>
 
+            {modalidade === "avista" && (
+              <div className="lancamento-campo">
+                <label htmlFor="formaPagamento">
+                  Forma de pagamento
+                </label>
+
+                <select
+                  id="formaPagamento"
+                  value={formaPagamento}
+                  onChange={(e) => setFormaPagamento(e.target.value)}
+                >
+                  <option value="Dinheiro">Dinheiro</option>
+                  <option value="Pix">Pix</option>
+                  <option value="Cartão">Cartão</option>
+                </select>
+              </div>
+            )}
+
+            {modalidade === "avista" && (
+              <div className="aviso-avista">
+                <strong>Compra paga na hora</strong>
+                <p>
+                  O consumo será registrado como quitado. O saldo devedor
+                  e o crédito disponível do aluno não serão alterados.
+                </p>
+              </div>
+            )}
+
+            {modalidade === "prazo" && (
+              <div className="aviso-prazo">
+                <strong>Compra a prazo</strong>
+                <p>
+                  O crédito disponível será utilizado primeiro. O restante
+                  será acrescentado à dívida, respeitando o limite do aluno.
+                </p>
+              </div>
+            )}
+
             {erro && (
-              <div className="lancamento-mensagem erro">{erro}</div>
+              <div className="lancamento-mensagem erro">
+                {erro}
+              </div>
             )}
 
             {mensagem && (
-              <div className="lancamento-mensagem sucesso">{mensagem}</div>
+              <div className="lancamento-mensagem sucesso">
+                {mensagem}
+              </div>
             )}
 
             <button type="submit" className="btn-registrar-consumo">
-              Registrar consumo
+              {modalidade === "avista"
+                ? "Registrar compra à vista"
+                : "Registrar consumo a prazo"}
             </button>
           </form>
         </section>
@@ -154,26 +317,31 @@ function Lancamentos() {
           <div className="lancamento-regra">
             <span className="regra-icone">1</span>
             <div>
-              <strong>Selecione o aluno</strong>
-              <p>Escolha o estudante que realizou o consumo.</p>
+              <strong>Selecione a modalidade</strong>
+              <p>
+                Escolha entre registrar uma compra paga na hora ou adicionar
+                um consumo à conta do aluno.
+              </p>
             </div>
           </div>
 
           <div className="lancamento-regra">
             <span className="regra-icone">2</span>
             <div>
-              <strong>Informe o consumo</strong>
-              <p>Adicione uma descrição e o valor da compra.</p>
+              <strong>Busque o aluno</strong>
+              <p>
+                Digite o nome ou a matrícula para encontrar o estudante.
+              </p>
             </div>
           </div>
 
           <div className="lancamento-regra">
             <span className="regra-icone">3</span>
             <div>
-              <strong>Crédito utilizado automaticamente</strong>
+              <strong>Informe a compra</strong>
               <p>
-                Se o aluno tiver crédito disponível, ele será utilizado
-                primeiro. O restante será acrescentado à dívida.
+                Adicione a descrição e o valor. Para compras à vista,
+                informe também a forma de pagamento.
               </p>
             </div>
           </div>
@@ -181,10 +349,10 @@ function Lancamentos() {
           <div className="lancamento-regra">
             <span className="regra-icone">4</span>
             <div>
-              <strong>Respeito ao limite</strong>
+              <strong>Registro automático</strong>
               <p>
-                O sistema não permite ultrapassar o limite de crédito
-                disponível.
+                Compras à vista ficam quitadas. Compras a prazo seguem
+                as regras de crédito e limite da conta.
               </p>
             </div>
           </div>
@@ -208,6 +376,8 @@ function Lancamentos() {
                 <tr>
                   <th>Aluno</th>
                   <th>Descrição</th>
+                  <th>Tipo</th>
+                  <th>Pagamento</th>
                   <th>Data</th>
                   <th>Valor</th>
                 </tr>
@@ -223,6 +393,10 @@ function Lancamentos() {
                     <tr key={consumo.id}>
                       <td>{aluno?.nome || "Aluno não encontrado"}</td>
                       <td>{consumo.descricao}</td>
+                      <td>
+                        {consumo.pagamentoAvista ? "À vista" : "A prazo"}
+                      </td>
+                      <td>{consumo.formaPagamento || "—"}</td>
                       <td>
                         {consumo.data
                           ? new Date(consumo.data).toLocaleDateString("pt-BR")
