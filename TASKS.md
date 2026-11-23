@@ -1,188 +1,228 @@
-# TASKS — Controle de Fiados da Cantina
 
-## Etapa 1 — Backend e API
+# TASKS.md
+# Plano de implementação — Sistema de Controle de Fiados da Cantina
 
-### TASK01 — Configuração inicial e teste da API
+## Como interpretar os status
 
-- [ ] Configurar o projeto Node.js e instalar Express, dotenv, Jest e Supertest.
-- [ ] Configurar `src/app.js` e `src/server.js`.
-- [ ] Criar a rota `GET /api/health`.
-- [ ] Criar e executar o primeiro teste automatizado da rota.
+- `[x]` Concluído e confirmado no projeto.
+- `[ ]` Pendente ou ainda sem confirmação suficiente.
+- `PARCIAL` A interface ou parte da lógica existe, mas o critério completo da tarefa ainda não foi atendido.
 
-**Critério de conclusão:** a rota retorna HTTP 200 e o teste passa.
+As tarefas que exigem integração com API, banco, autenticação ou testes não devem ser consideradas concluídas apenas porque existe uma tela funcional com estado local do React.
 
-Exemplo de teste:
+## Fase 1 — Backend, banco e regras financeiras
 
-```javascript
-const request = require('supertest');
-const app = require('../src/app');
+### T01 — Estrutura do backend e endpoint de saúde
+- [ ] Separar aplicação Express (`app.js`) e inicialização (`server.js`) para permitir testes.
+- [ ] Disponibilizar `GET /api/health`.
+- [ ] Criar teste automatizado do endpoint.
+- [ ] Confirmar resposta HTTP 200 e execução do teste.
 
-describe('GET /api/health', () => {
-  it('deve retornar status 200', async () => {
-    const response = await request(app).get('/api/health');
+Status: PARCIAL — o servidor Express foi iniciado localmente, mas não há confirmação suficiente de endpoint de saúde e teste automatizado aprovados.
 
-    expect(response.status).toBe(200);
-    expect(response.body.status).toBe('ok');
-  });
-});
-```
+### T02 — PostgreSQL e Sequelize
+- [x] Criar banco local `controle_fiados`.
+- [x] Configurar o serviço PostgreSQL local.
+- [ ] Padronizar configuração por variáveis de ambiente.
+- [ ] Confirmar migrations reproduzíveis em banco limpo.
+- [ ] Criar e validar banco de teste.
 
-### TASK02 — Configuração do banco de dados
+Status: PARCIAL — banco local e tabelas foram criados/consultados, mas a configuração completa e migrations ainda precisam ser verificadas.
 
-- [ ] Configurar a conexão com PostgreSQL e Sequelize.
-- [ ] Criar os modelos `Aluno`, `Fiado` e `Pagamento`.
-- [ ] Definir os relacionamentos entre os modelos.
-- [ ] Conferir a estrutura das tabelas e as restrições necessárias.
-- [ ] Testar a conexão com o banco de dados.
+### T03 — Modelos e associações
+- [x] Criar modelos relacionados a Aluno, Fiado e Pagamento.
+- [x] Definir associações entre Aluno, Fiado e Pagamento.
+- [ ] Revisar campos e tipos monetários para persistência consistente.
+- [ ] Garantir migrations reversíveis e criação do esquema do zero.
+- [ ] Testar todas as relações em banco de teste.
 
-**Critério de conclusão:** os modelos, os relacionamentos e a conexão funcionam corretamente.
+Status: PARCIAL — modelos e tabelas principais existem, mas a modelagem final e as migrations precisam ser validadas.
 
-Exemplo de relacionamento:
+### T04 — Cadastro e consulta de alunos pela API
+- [ ] Implementar e validar `POST /api/alunos`.
+- [ ] Implementar e validar `GET /api/alunos` com busca e filtros.
+- [ ] Implementar e validar `GET /api/alunos/:id`.
+- [ ] Implementar e validar atualização cadastral.
+- [ ] Testar validação, duplicidade e aluno inexistente.
 
-```javascript
-Aluno.hasMany(Fiado, {
-  foreignKey: 'alunoId',
-  as: 'fiados'
-});
+Status: PENDENTE — a interface de alunos existe, mas a integração completa com a API não foi confirmada.
 
-Fiado.belongsTo(Aluno, {
-  foreignKey: 'alunoId',
-  as: 'aluno'
-});
-```
+### T05 — Consulta da conta e cálculo do saldo no backend
+- [ ] Criar consulta de conta por aluno.
+- [ ] Centralizar cálculo de saldo, limite e crédito disponível no backend.
+- [ ] Garantir consistência entre resumo e extrato.
+- [ ] Testar conta sem lançamentos, com consumo, pagamento e estorno.
 
-### TASK03 — Cadastro e consulta de alunos
+Status: PENDENTE — os cálculos atuais do protótipo são realizados no contexto React.
 
-- [ ] Implementar `POST /api/alunos`.
-- [ ] Implementar `GET /api/alunos`.
-- [ ] Implementar `GET /api/alunos/:id`.
-- [ ] Implementar `PUT /api/alunos/:id`.
-- [ ] Implementar `PATCH /api/alunos/:id/status`.
-- [ ] Validar os dados recebidos.
-- [ ] Testar as rotas no Postman.
+### T06 — Registro de consumo a prazo pela API
+- [ ] Implementar rota de criação de consumo/fiado.
+- [ ] Validar valor, aluno, situação e limite.
+- [ ] Implementar bloqueio por atraso.
+- [ ] Registrar operação e auditoria na mesma transação.
+- [ ] Testar sucesso, limite excedido e conta bloqueada.
 
-**Critério de conclusão:** cadastro, listagem, consulta, edição e alteração de status funcionam corretamente.
+Status: PARCIAL — a regra de consumo a prazo existe no contexto React, mas a validação definitiva no backend não foi confirmada.
 
-### TASK04 — Consulta de saldo e registro de consumos
+### T07 — Pagamento parcial/total e amortização FIFO
+- [ ] Implementar rota de pagamento.
+- [ ] Validar valor e saldo em aberto.
+- [ ] Aplicar pagamento aos consumos mais antigos primeiro.
+- [ ] Persistir as amortizações.
+- [ ] Testar pagamento parcial, quitação de vários consumos e valor acima da dívida.
 
-- [ ] Implementar `GET /api/alunos/:id/saldo`.
-- [ ] Implementar as rotas de cadastro e consulta de fiados.
-- [ ] Criar ou organizar o serviço de cálculo do saldo.
-- [ ] Validar o limite de crédito e o status do aluno.
-- [ ] Aplicar o bloqueio por atraso conforme os requisitos.
-- [ ] Testar os cálculos e as validações.
+Status: PARCIAL — existe função de pagamento no contexto React com aplicação FIFO local; falta comprovar a operação transacional pela API.
 
-**Critério de conclusão:** consumos válidos são registrados, consumos proibidos são recusados e o saldo corresponde às movimentações.
+### T08 — Estorno auditável
+- [ ] Implementar rota de estorno.
+- [ ] Exigir motivo e permissão.
+- [ ] Impedir estorno duplicado.
+- [ ] Preservar lançamento original e registrar operação compensatória.
+- [ ] Testar estorno e consistência de saldo/crédito.
 
-### TASK05 — Pagamentos e estornos
+Status: PARCIAL — existe função de estorno no contexto React com motivo obrigatório e marcação do lançamento; falta integração e auditoria persistente no backend.
 
-- [ ] Implementar o registro de pagamentos.
-- [ ] Permitir pagamentos parciais e totais.
-- [ ] Implementar a amortização FIFO, priorizando os consumos mais antigos.
-- [ ] Implementar estornos com justificativa.
-- [ ] Preservar o histórico financeiro.
-- [ ] Recalcular corretamente o saldo após cada operação.
-- [ ] Testar pagamentos e estornos no Postman.
+### T09 — Extrato e filtros pela API
+- [ ] Implementar consulta de lançamentos.
+- [ ] Implementar extrato por aluno.
+- [ ] Implementar filtros por aluno, período, tipo e forma de pagamento.
+- [ ] Implementar paginação e ordenação estável.
+- [ ] Testar saldo acumulado e combinação de filtros.
 
-**Critério de conclusão:** pagamentos e estornos atualizam corretamente o saldo e o extrato, sem apagar o histórico.
+Status: PARCIAL — existem históricos e listagens no frontend, mas a consulta integrada pela API não foi confirmada.
 
-### TASK06 — Extratos, configurações e permissões
+### T10 — Autenticação, autorização e operadores
+- [ ] Definir mecanismo de autenticação.
+- [ ] Armazenar senhas com hash seguro.
+- [ ] Criar middlewares de autenticação e autorização.
+- [ ] Implementar gerenciamento de operadores.
+- [ ] Proteger rotas financeiras e configurações.
+- [ ] Testar acesso sem login e sem permissão.
 
-- [ ] Implementar a consulta do extrato do aluno.
-- [ ] Implementar filtros de movimentações previstos nos requisitos.
-- [ ] Implementar as configurações de crédito e atraso.
-- [ ] Implementar autenticação e controle de permissões.
-- [ ] Testar as rotas protegidas e os acessos permitidos.
+Status: PENDENTE — há páginas de Login e Perfil, mas isso não comprova autenticação ou autorização real.
 
-**Critério de conclusão:** as consultas apresentam dados corretos e cada usuário só acessa as operações autorizadas.
+### T11 — Configurações operacionais
+- [ ] Implementar leitura e atualização de configurações pela API.
+- [ ] Persistir nome da cantina, ano letivo, limite padrão e prazo de atraso.
+- [ ] Validar campos e restringir alterações por permissão.
+- [ ] Testar aplicação das configurações às operações.
 
-## Etapa 2 — Frontend
+Status: PARCIAL — a página de configurações existe no frontend; persistência e autorização pela API ainda não foram confirmadas.
 
-### TASK07 — Configuração inicial do React
+### T12 — Testes de integração e documentação da API
+- [ ] Criar testes automatizados para rotas principais.
+- [ ] Testar sequência cadastro → consumo → pagamento → consulta → estorno.
+- [ ] Testar integridade transacional.
+- [ ] Padronizar respostas de erro.
+- [ ] Executar a suíte em ambiente de teste limpo.
 
-- [ ] Criar ou configurar o projeto React.
-- [ ] Configurar React Router e CSS.
-- [ ] Criar o serviço de comunicação com a API.
-- [ ] Configurar o tratamento de respostas e erros.
-- [ ] Testar a comunicação com o backend.
+Status: PENDENTE — não há confirmação de suíte de integração aprovada.
 
-**Critério de conclusão:** o frontend inicia e consegue consultar a API.
+## Fase 2 — Frontend
 
-### TASK08 — Página de alunos
+### T13 — Estrutura React e cliente de API
+- [x] Criar aplicação frontend com React/Vite.
+- [x] Configurar navegação com React Router.
+- [x] Organizar páginas, componentes, contexto e estilos.
+- [ ] Criar cliente central de API em `src/services`.
+- [ ] Configurar URL base por variável de ambiente.
+- [ ] Centralizar tratamento de erros e carregamento das requisições.
 
-- [ ] Criar a listagem de alunos.
-- [ ] Implementar pesquisa e filtros.
-- [ ] Criar o formulário de cadastro e edição.
-- [ ] Implementar a ativação e desativação.
-- [ ] Integrar os componentes às rotas da API.
+Status: PARCIAL — estrutura e navegação estão implementadas; integração centralizada com a API continua pendente.
 
-**Critério de conclusão:** é possível cadastrar, consultar, editar e alterar o status dos alunos pela interface.
+### T14 — Tela de contas dos alunos
+- [x] Criar listagem de alunos.
+- [x] Criar busca e filtros na interface.
+- [x] Criar formulário de cadastro na interface.
+- [x] Permitir abrir a conta/detalhe do aluno.
+- [ ] Integrar listagem e cadastro à API.
+- [ ] Validar persistência, duplicidade e erros retornados pelo backend.
 
-### TASK09 — Página de detalhes da conta
+Status: PARCIAL — interface implementada; integração com API não concluída.
 
-- [ ] Exibir os dados do aluno.
-- [ ] Exibir saldo devedor, limite e crédito disponível.
-- [ ] Exibir consumos pendentes.
-- [ ] Exibir o extrato financeiro.
-- [ ] Integrar o formulário de pagamento.
-- [ ] Implementar o formulário de estorno com justificativa, conforme as permissões.
+### T15 — Detalhe da conta do aluno
+- [x] Exibir dados do aluno e situação da conta.
+- [x] Exibir resumo de saldo, limite e crédito.
+- [x] Exibir consumos e histórico.
+- [x] Criar formulário de pagamento.
+- [x] Criar formulário de estorno com motivo.
+- [ ] Integrar operações à API.
+- [ ] Validar atualização do resumo após operações persistidas.
 
-**Critério de conclusão:** as informações e operações da interface correspondem aos dados da API.
+Status: PARCIAL — fluxos visuais e lógica local implementados; falta integração e validação ponta a ponta.
 
-### TASK10 — Página de consumos e movimentações
+### T16 — Tela de lançamentos
+- [x] Criar formulário de consumo a prazo.
+- [x] Criar busca de aluno por nome ou matrícula.
+- [x] Criar seleção entre lançamento a prazo e compra à vista.
+- [x] Criar seleção de forma de pagamento para compra à vista (Dinheiro, Pix ou Cartão).
+- [x] Registrar compra à vista como quitada no estado local, sem aumentar dívida nem consumir crédito.
+- [x] Exibir lançamentos recentes com modalidade e forma de pagamento.
+- [ ] Integrar lançamentos à API e ao banco.
+- [ ] Validar comportamento de conta bloqueada pela API.
+- [ ] Integrar compras à vista aos relatórios sem duplicar valores.
 
-- [ ] Criar o formulário de registro de consumo.
-- [ ] Criar a tabela de movimentações.
-- [ ] Implementar os filtros previstos no escopo.
-- [ ] Exibir mensagens de sucesso, erro e bloqueio.
-- [ ] Integrar a página ao backend.
+Status: PARCIAL — interface e lógica local implementadas; persistência e integração com relatórios pendentes.
 
-**Critério de conclusão:** é possível registrar consumos e consultar movimentações pela interface.
+### T17 — Configurações e perfil
+- [x] Criar página de configurações.
+- [x] Criar página de perfil administrativo.
+- [x] Permitir edição local dos campos previstos no perfil.
+- [ ] Persistir configurações e perfil pela API.
+- [ ] Implementar autenticação, alteração de senha e permissões reais.
+- [ ] Validar acesso conforme perfil.
 
-### TASK11 — Configurações e relatórios
+Status: PARCIAL — páginas do frontend existem; persistência e segurança ainda não foram concluídas.
 
-- [ ] Criar os formulários de configuração previstos nos requisitos.
-- [ ] Implementar o gerenciamento de operadores, conforme as permissões.
-- [ ] Criar as consultas e tabelas de relatórios previstas no escopo.
-- [ ] Integrar os componentes à API.
+### T18 — Relatórios
+- [x] Criar página de relatórios.
+- [ ] Integrar relatórios aos dados persistidos.
+- [ ] Validar filtros de período.
+- [ ] Conferir cálculos de recebimentos, consumos e estornos.
+- [ ] Incluir compras à vista nos totais apropriados sem contar duas vezes.
+- [ ] Testar consistência com as contas dos alunos.
 
-**Critério de conclusão:** as funcionalidades implementadas respeitam as regras de negócio e as permissões.
+Status: PARCIAL — página visual existe; cálculos e integração precisam ser validados com dados da API.
 
-### TASK12 — Visão geral
+### T19 — Visão geral
+- [x] Criar página inicial/visão geral.
+- [x] Exibir cartões e informações resumidas no protótipo.
+- [ ] Integrar indicadores a consultas reais da API.
+- [ ] Conferir total a receber, contas em atraso e próximas do limite.
+- [ ] Validar total recebido no período com pagamentos e compras à vista.
 
-- [ ] Criar o resumo financeiro.
-- [ ] Exibir contas em atraso.
-- [ ] Exibir movimentações recentes.
-- [ ] Integrar os indicadores aos dados reais da API.
+Status: PARCIAL — visão geral visual existe; indicadores ainda precisam ser ligados aos dados persistidos.
 
-**Critério de conclusão:** a visão geral apresenta informações corretas e é desenvolvida somente após as funcionalidades principais.
+## Fase 3 — Verificação final
 
-## Etapa 3 — Validação final
+### T20 — Teste ponta a ponta e revisão
+- [ ] Executar cadastro de aluno pela API.
+- [ ] Registrar consumo a prazo e validar saldo/limite.
+- [ ] Registrar compra à vista e validar que não altera dívida nem crédito.
+- [ ] Registrar pagamento parcial e validar FIFO.
+- [ ] Estornar lançamento e verificar motivo e histórico.
+- [ ] Validar bloqueio por limite e atraso.
+- [ ] Validar permissões de operador.
+- [ ] Conferir filtros, estados vazios e mensagens de erro.
+- [ ] Conferir relatórios e visão geral com dados persistidos.
+- [ ] Comparar as telas com o Figma.
+- [ ] Confirmar que os três documentos refletem o código entregue.
 
-### TASK13 — Testes de integração e correções
+Status: PENDENTE — os testes completos integrados ainda não foram confirmados.
 
-- [ ] Testar o fluxo completo de cadastro de aluno, consumo e pagamento.
-- [ ] Verificar pagamentos parciais, totais e amortização FIFO.
-- [ ] Testar estornos e justificativas.
-- [ ] Verificar limites de crédito e bloqueios por atraso.
-- [ ] Testar autenticação e permissões.
-- [ ] Conferir a integração entre React, API e PostgreSQL.
-- [ ] Corrigir os erros encontrados.
-- [ ] Conferir as telas com o protótipo do Figma.
-- [ ] Verificar a consistência entre `REQUIREMENTS.md`, `DESIGN.md` e `TASKS.md`.
+## Resumo do que já está implementado no protótipo
 
-**Critério de conclusão:** os fluxos principais funcionam, os testes passam e os documentos correspondem ao sistema implementado.
+- [x] Estrutura inicial do frontend React/Vite.
+- [x] Navegação entre as páginas principais.
+- [x] Listagem, busca e cadastro de alunos na interface.
+- [x] Tela de conta do aluno.
+- [x] Pagamento local com amortização FIFO.
+- [x] Estorno local com motivo obrigatório.
+- [x] Lançamento de consumo a prazo.
+- [x] Busca por nome ou matrícula na tela de lançamentos.
+- [x] Compra à vista com forma de pagamento registrada.
+- [x] Página de configurações.
+- [x] Página de perfil administrativo.
+- [x] Página de relatórios e visão geral no frontend.
 
-## Ordem obrigatória de execução
-
-1. Configurar e testar a API.
-2. Configurar o banco de dados e os modelos.
-3. Implementar e testar as rotas e regras de negócio do backend.
-4. Implementar pagamentos, estornos, extratos e permissões.
-5. Desenvolver o frontend e integrar com a API.
-6. Criar a visão geral por último.
-7. Executar os testes finais e conferir o protótipo.
-
-## Regra de conclusão das tarefas
-
-Uma tarefa só poderá ser marcada como concluída após a implementação e os testes correspondentes. Não criar funcionalidades fora do escopo definido em `REQUIREMENTS.md`. O backend deverá estar testado antes do avanço para as funcionalidades dependentes do frontend.
+**Importante:** os itens acima descrevem o protótipo frontend e a lógica em memória. Eles não significam que todas as funcionalidades estejam persistidas no PostgreSQL, integradas à API, protegidas por autenticação ou cobertas por testes automatizados.

@@ -1,219 +1,163 @@
-# REQUIREMENTS.md — Sistema de Controle de Fiados da Cantina
+
+# REQUIREMENTS.md
+# Sistema de Controle de Fiados da Cantina
 
 ## 1. Objetivo do sistema
 
-O sistema tem como objetivo controlar os consumos fiados realizados pelos alunos na cantina, registrando as dívidas, os pagamentos e os estornos.
+O Sistema de Controle de Fiados da Cantina permite que a administração da cantina cadastre e consulte alunos, registre compras a prazo e à vista, acompanhe dívidas e créditos, registre pagamentos e estornos e consulte informações operacionais.
 
-A aplicação deverá permitir consultar o saldo devedor de cada aluno, controlar o limite de crédito e manter um histórico das movimentações financeiras.
+O sistema deve manter o histórico financeiro de cada aluno. O saldo devedor não pode ser editado diretamente: ele deve resultar dos lançamentos financeiros válidos.
 
-O foco principal é registrar e controlar os fiados com segurança e consistência.
+## 2. Escopo
 
-## 2. Escopo do sistema
+### 2.1 Funcionalidades incluídas
 
-O sistema deverá oferecer as seguintes funcionalidades:
+1. Cadastro, consulta, pesquisa e filtro de alunos.
+2. Consulta da conta financeira de um aluno, incluindo saldo devedor, limite, crédito disponível e situação.
+3. Registro de consumo a prazo associado a um aluno.
+4. Registro de compra à vista, com forma de pagamento informada manualmente.
+5. Registro de pagamento total ou parcial de uma dívida existente.
+6. Amortização dos pagamentos nos consumos em aberto mais antigos primeiro (FIFO).
+7. Registro de estorno/correção com motivo obrigatório e preservação do histórico.
+8. Consulta do extrato de lançamentos.
+9. Aplicação das regras de limite de crédito e atraso.
+10. Configuração de dados operacionais da cantina, limite padrão e prazo para bloqueio.
+11. Perfil administrativo e estrutura prevista para controle de acesso por perfil/permissão.
+12. Relatórios operacionais e financeiros derivados dos lançamentos.
+13. Visão geral com indicadores calculados a partir dos dados registrados.
 
-- Cadastro, consulta, edição e ativação ou desativação de alunos.
-- Definição e consulta do limite de crédito dos alunos.
-- Registro e consulta de consumos fiados.
-- Cálculo do saldo devedor e do crédito disponível.
-- Registro de pagamentos parciais e totais.
-- Distribuição dos pagamentos conforme a regra FIFO.
-- Registro de estornos com justificativa.
-- Consulta do extrato e do histórico financeiro.
-- Bloqueio de novos consumos conforme as regras de limite e atraso.
-- Controle de acesso conforme o perfil do usuário.
-- Configuração das regras de crédito e atraso, quando autorizada.
-- Consulta de informações financeiras e operacionais previstas no projeto.
+### 2.2 Fora do escopo desta versão
 
-## 3. Requisitos funcionais
+- Integração com bancos, Pix, maquininhas ou gateways de pagamento.
+- Cobrança automática por e-mail, SMS ou WhatsApp.
+- Aplicativo móvel independente.
+- Integração com sistemas acadêmicos externos.
+- Emissão fiscal ou contabilidade oficial.
+- Gestão de estoque, fornecedores, receitas ou compras da cantina.
+- Juros, multas ou parcelamento de dívidas.
+- Portal independente para aluno/responsável nesta versão.
+- Múltiplas unidades com consolidação entre cantinas.
 
-### RF01 — Cadastro de alunos
+## 3. Atores e permissões
 
-O sistema deverá permitir cadastrar alunos com nome, matrícula e turma.
+### Administrador da cantina
+- Gerenciar dados e configurações operacionais.
+- Consultar alunos, contas, lançamentos e relatórios.
+- Registrar consumos a prazo e compras à vista.
+- Registrar pagamentos e estornos.
+- Gerenciar operadores e permissões quando a autenticação estiver implementada.
 
-A matrícula deverá ser única. O sistema deverá validar os campos obrigatórios e impedir cadastros inválidos.
+### Operador da cantina
+- Consultar alunos e contas.
+- Registrar consumos e compras à vista.
+- Registrar pagamentos e estornos se possuir permissão.
+- Consultar os lançamentos necessários à sua operação.
 
-### RF02 — Consulta e edição de alunos
+### Aluno/responsável
+Nesta versão do projeto, não haverá portal de autenticação próprio para aluno/responsável. A consulta e a administração dos registros serão realizadas pela interface administrativa da cantina.
 
-O sistema deverá permitir listar, pesquisar, consultar e editar os dados dos alunos.
+## 4. Requisitos funcionais
 
-Também deverá permitir ativar ou desativar um cadastro sem excluir o histórico financeiro associado.
+### RF01 — Cadastro de aluno
+O sistema deve permitir cadastrar aluno com identificador único, nome, turma/série e demais dados definidos para a operação. Deve validar campos obrigatórios e impedir duplicidade do identificador.
 
-### RF03 — Limite de crédito
+### RF02 — Consulta de alunos
+O sistema deve listar e pesquisar alunos por nome ou matrícula e permitir filtrar resultados por situação. A listagem deve apresentar informações relevantes da conta.
 
-Cada aluno deverá possuir um limite de crédito. O limite padrão será de R$ 50,00.
+### RF03 — Consulta de conta do aluno
+O sistema deve exibir saldo devedor, limite de crédito, crédito disponível, situação da conta e histórico cronológico dos lançamentos do aluno.
 
-O sistema deverá calcular o crédito disponível subtraindo o saldo devedor do limite de crédito.
+### RF04 — Registro de consumo a prazo
+O sistema deve registrar consumo com aluno, data/hora, descrição e valor positivo. Antes de aceitar o lançamento, deve validar a situação da conta, o crédito disponível e o limite.
 
-### RF04 — Registro de consumos fiados
+### RF05 — Registro de compra à vista
+O sistema deve permitir registrar uma compra paga no momento do lançamento, informando aluno, descrição, valor e forma de pagamento (Dinheiro, Pix ou Cartão). A compra deve ser registrada como quitada, sem aumentar a dívida e sem consumir o crédito disponível do aluno.
 
-O sistema deverá permitir registrar consumos com identificação do aluno, descrição, valor e data.
+### RF06 — Atualização do saldo
+O saldo devedor deve resultar dos lançamentos financeiros válidos, considerando pagamentos e estornos. Valores monetários devem ser tratados com precisão decimal, evitando cálculos financeiros baseados em ponto flutuante binário.
 
-Antes de registrar um consumo, deverá verificar se o aluno existe, está ativo, não está bloqueado e possui crédito disponível.
+### RF07 — Limite de crédito
+O sistema deve permitir definir limite por aluno e limite padrão para novas contas. O valor padrão inicial é R$ 50,00. Um consumo a prazo que ultrapasse o limite disponível deve ser recusado.
 
-### RF05 — Consulta de saldo
+### RF08 — Bloqueio por atraso
+O sistema deve identificar contas com lançamentos vencidos conforme o prazo configurado. A conta em atraso/bloqueada não pode receber novos consumos a prazo. Compras à vista não geram nova dívida e podem ser registradas sem alterar o saldo devedor.
 
-O sistema deverá apresentar o saldo devedor, o limite de crédito e o crédito disponível de cada aluno.
+### RF09 — Registro de pagamento de dívida
+O sistema deve permitir registrar pagamento total ou parcial de uma dívida existente, informando aluno, valor, data/hora e forma de pagamento. O valor deve ser positivo e não pode exceder o saldo em aberto.
 
-O saldo deverá ser calculado a partir dos consumos e dos pagamentos válidos, sem depender de alterações manuais no valor da dívida.
+### RF10 — Amortização de pagamentos
+O pagamento deve abater primeiro os consumos em aberto mais antigos (FIFO). O sistema deve preservar o valor original, o valor amortizado e o saldo restante de cada consumo.
 
-### RF06 — Registro de pagamentos
+### RF11 — Estorno/correção
+O sistema deve permitir estornar um lançamento autorizado, exigir motivo, registrar data/hora e preservar o registro original. Um estorno não deve apagar fisicamente o lançamento e não pode ser repetido.
 
-O sistema deverá permitir registrar pagamentos parciais ou totais associados aos consumos fiados.
+### RF12 — Extrato e lançamentos
+O sistema deve listar lançamentos com data/hora, aluno, tipo, descrição/motivo, forma de pagamento quando aplicável e valor. Deve oferecer pesquisa e filtros compatíveis com a tela.
 
-O valor pago deverá ser validado para impedir pagamentos inválidos ou superiores ao saldo devido.
+### RF13 — Configurações operacionais
+O sistema deve permitir a usuários autorizados alterar dados operacionais da cantina, ano letivo, limite padrão, prazo para bloqueio e opções de bloqueio. As alterações devem ser validadas e persistidas quando a integração estiver concluída.
 
-### RF07 — Amortização FIFO
+### RF14 — Operadores e permissões
+O sistema deve identificar o operador responsável pelas operações e restringir ações conforme as permissões atribuídas. Senhas, se utilizadas, devem ser armazenadas como hash, nunca em texto puro.
 
-Quando um pagamento for distribuído entre diferentes dívidas abertas, o sistema deverá priorizar os consumos mais antigos.
+### RF15 — Relatórios
+O sistema deve disponibilizar relatórios operacionais e financeiros derivados dos lançamentos, incluindo inadimplência, consumo por turma e estornos. Valores recebidos por compras à vista e pagamentos de dívidas devem ser identificados corretamente, sem duplicidade.
 
-A distribuição deverá respeitar os valores ainda devidos em cada consumo.
+### RF16 — Visão geral
+O sistema deve apresentar indicadores como total a receber, contas em atraso, contas próximas do limite e total recebido no período. Os indicadores devem ser calculados a partir dos registros financeiros.
 
-### RF08 — Estornos
-
-O sistema deverá permitir estornar pagamentos mediante justificativa e autorização adequada.
-
-O estorno deverá preservar o registro original, armazenar a justificativa e atualizar os cálculos financeiros.
-
-### RF09 — Extrato financeiro
-
-O sistema deverá apresentar o histórico de consumos, pagamentos e estornos do aluno.
-
-As informações deverão permitir identificar as movimentações, seus valores e suas datas.
-
-### RF10 — Bloqueio por limite e atraso
-
-O sistema deverá impedir novos consumos quando o aluno não possuir crédito disponível ou estiver bloqueado por atraso, conforme as regras configuradas.
-
-### RF11 — Autenticação e permissões
-
-O sistema deverá controlar o acesso às funcionalidades de acordo com o perfil do usuário.
-
-As operações administrativas e financeiras deverão ser restritas aos usuários autorizados.
-
-O aluno poderá consultar apenas os próprios dados financeiros, conforme as permissões definidas.
-
-### RF12 — Configurações
-
-O sistema deverá permitir que usuários autorizados consultem e alterem as regras de crédito e atraso previstas no projeto.
-
-### RF13 — Consultas e informações operacionais
-
-O sistema deverá permitir consultar movimentações financeiras e informações operacionais necessárias ao controle dos fiados.
-
-Os resultados deverão ser baseados nos dados registrados no banco de dados.
-
-### RF14 — Visão geral
-
-O sistema poderá apresentar um resumo financeiro, contas em atraso e movimentações recentes.
-
-Essa funcionalidade será desenvolvida somente após a conclusão das operações principais de cadastro, consumo, pagamento e consulta.
-
-## 4. Requisitos não funcionais
-
-### RNF01 — Tecnologias
-
-O backend deverá utilizar Node.js e Express para disponibilizar uma API REST.
-
-O banco de dados deverá utilizar PostgreSQL, com Sequelize ORM para o mapeamento das entidades e operações de persistência.
-
-O frontend deverá utilizar React, React Router e CSS.
-
-### RNF02 — Integridade dos dados
-
-O sistema deverá preservar os relacionamentos entre alunos, consumos e pagamentos.
-
-As operações financeiras deverão evitar inconsistências nos saldos e nos registros.
-
-### RNF03 — Validação
-
-Os dados recebidos pela API deverão ser validados antes de serem persistidos.
-
-Erros deverão retornar respostas adequadas, sem expor informações internas desnecessárias.
-
-### RNF04 — Segurança
-
-O sistema deverá proteger as operações por autenticação e autorização, conforme os perfis definidos.
-
-As permissões deverão ser verificadas no backend.
-
-### RNF05 — Testabilidade
-
-As rotas deverão poder ser testadas individualmente com o Postman e por testes automatizados, utilizando Jest e Supertest.
-
-### RNF06 — Manutenibilidade
-
-O código deverá ser organizado em rotas, modelos, serviços e middlewares, conforme a necessidade do projeto.
-
-As responsabilidades deverão ser separadas para facilitar a manutenção e os testes.
-
-### RNF07 — Usabilidade
-
-As páginas deverão apresentar informações claras, mensagens de erro e confirmações de operações.
-
-A interface deverá seguir o protótipo aprovado no Figma.
+### RF17 — Perfil administrativo
+O sistema deve apresentar os dados do perfil administrativo e permitir editar os campos pessoais previstos na interface. Alteração de senha e gerenciamento real de sessão dependem da implementação da autenticação.
 
 ## 5. Regras de negócio
 
-### RN01 — Limite padrão
+- RN01: O saldo devedor corresponde à soma dos valores de consumo a prazo ainda não amortizados, considerando pagamentos e estornos válidos.
+- RN02: O limite padrão de crédito é R$ 50,00, podendo ser alterado por usuário autorizado.
+- RN03: Um consumo a prazo que ultrapasse o limite disponível deve ser recusado.
+- RN04: Contas com consumo vencido há mais dias do que o prazo configurado ficam bloqueadas para novos consumos a prazo.
+- RN05: O pagamento parcial deve ser aplicado aos consumos mais antigos em aberto antes dos mais recentes.
+- RN06: Estorno exige motivo e não remove o registro original; deve manter registro compensatório/rastreável.
+- RN07: Operações financeiras devem ser atômicas/transacionais na versão integrada ao banco.
+- RN08: O saldo exibido no resumo e no extrato deve ser consistente com os lançamentos.
+- RN09: Somente operadores autenticados e autorizados podem realizar operações protegidas quando a autenticação estiver implementada.
+- RN10: Relatórios e indicadores devem derivar dos dados registrados, sem números demonstrativos fixos.
+- RN11: Valores financeiros devem usar NUMERIC/DECIMAL no PostgreSQL e validação adequada na API.
+- RN12: O ano letivo e o prazo de atraso devem ser tratados como configurações.
+- RN13: Compra à vista é registrada como quitada e não aumenta o saldo devedor nem utiliza crédito disponível.
+- RN14: A forma de pagamento de uma compra à vista ou de um pagamento de dívida é apenas registrada manualmente; o sistema não processa a transação financeira externa.
+- RN15: Uma conta bloqueada para compras a prazo ainda pode registrar compra à vista, pois essa operação não aumenta a dívida.
 
-O limite de crédito padrão de cada aluno será de R$ 50,00, podendo ser alterado por usuário autorizado, conforme as regras do sistema.
+## 6. Requisitos não funcionais
 
-### RN02 — Cálculo do saldo
+- RNF01 — Arquitetura: frontend separado de API backend Node.js/Express.
+- RNF02 — Persistência: PostgreSQL como banco de dados relacional.
+- RNF03 — ORM: Sequelize para modelos e associações.
+- RNF04 — Segurança: validar dados no servidor e aplicar autorização por perfil.
+- RNF05 — Integridade: transações de banco para consumo, pagamento, amortização e estorno.
+- RNF06 — Testabilidade: rotas documentadas e testadas por testes automatizados.
+- RNF07 — Usabilidade: mensagens claras de validação, confirmação para operações sensíveis e indicação visível de conta bloqueada.
+- RNF08 — Manutenibilidade: separar rotas, controllers, services, models e middlewares.
+- RNF09 — Auditoria: preservar o histórico das operações financeiras relevantes.
+- RNF10 — Interface: priorizar a resolução de referência 1366 × 768, com adaptação básica para telas menores.
+- RNF11 — Configuração: credenciais e parâmetros de ambiente devem ficar em variáveis de ambiente.
 
-O saldo devedor corresponderá aos consumos ainda não quitados, descontando os pagamentos válidos e considerando os estornos registrados.
+## 7. Critérios de aceitação essenciais
 
-### RN03 — Restrição de consumo
+1. Um aluno pode ser cadastrado e localizado na listagem.
+2. Um consumo a prazo válido aparece no histórico e aumenta o saldo em aberto.
+3. Um consumo que viola o limite ou o bloqueio por atraso é recusado.
+4. Uma compra à vista aparece como quitada e não altera saldo devedor nem crédito disponível.
+5. Um pagamento parcial reduz a dívida e abate primeiro o consumo mais antigo.
+6. Um estorno exige motivo, mantém o histórico e não pode ser repetido.
+7. O resumo da conta e o extrato apresentam valores consistentes.
+8. Usuários sem permissão não conseguem executar operações restritas quando a autorização da API estiver implementada.
+9. Indicadores e relatórios são calculados a partir dos lançamentos.
+10. As telas integradas usam a API e os dados persistidos, sem depender de dados demonstrativos fixos.
 
-O sistema não deverá permitir consumos que ultrapassem o crédito disponível nem consumos realizados por alunos bloqueados.
+## 8. Premissas e pontos pendentes
 
-### RN04 — Pagamentos parciais
-
-Um consumo poderá receber vários pagamentos até a quitação do valor devido.
-
-### RN05 — Amortização FIFO
-
-Os pagamentos distribuídos entre diferentes consumos deverão quitar primeiro as dívidas mais antigas.
-
-### RN06 — Estornos
-
-Todo estorno deverá possuir justificativa, preservar o histórico e refletir corretamente nos cálculos financeiros.
-
-### RN07 — Histórico
-
-Consumos, pagamentos e estornos deverão manter seus registros para permitir consultas posteriores.
-
-### RN08 — Permissões
-
-As operações deverão respeitar as permissões atribuídas a cada perfil de usuário.
-
-## 6. Restrições de escopo
-
-O desenvolvimento deverá se limitar às funcionalidades descritas neste documento e ao protótipo do Figma.
-
-Não fazem parte do escopo, salvo alteração formal dos requisitos:
-
-- Integração com bancos ou gateways de pagamento.
-- Aplicativo móvel independente.
-- Envio automático de notificações.
-- Funcionalidades adicionais de exportação de dados.
-- Gráficos avançados sem necessidade definida.
-- Funcionalidades que não contribuam diretamente para o controle de fiados.
-
-A visão geral não deverá ser desenvolvida antes das funcionalidades principais.
-
-## 7. Critérios gerais de aceitação
-
-O sistema será considerado funcional quando:
-
-- Os alunos puderem ser cadastrados, consultados e editados.
-- Os consumos forem registrados respeitando os limites e bloqueios.
-- O saldo devedor e o crédito disponível forem calculados corretamente.
-- Os pagamentos parciais e totais funcionarem.
-- A amortização FIFO respeitar a ordem das dívidas.
-- Os estornos exigirem justificativa e preservarem o histórico.
-- As permissões impedirem operações não autorizadas.
-- O extrato apresentar as movimentações financeiras corretamente.
-- As rotas principais e os fluxos financeiros forem testados.
-- O frontend estiver integrado à API e alinhado ao protótipo.
-- Os três documentos do projeto apresentarem requisitos, arquitetura e tarefas consistentes entre si.
+- Os nomes, valores e datas usados no protótipo são demonstrativos.
+- As formas de pagamento Dinheiro, Pix e Cartão são apenas registradas manualmente; não existe processamento de pagamento externo.
+- A autenticação e a política de criação de operadores ainda precisam ser concluídas.
+- A regra exata de vencimento de cada consumo deve ser formalizada na implementação do backend.
+- O frontend atualmente possui fluxos que usam estado local do React; isso não equivale à persistência definitiva no PostgreSQL.
